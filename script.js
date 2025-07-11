@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoBtn = document.getElementById('info-btn');
     const exitBtn = document.getElementById('exit-btn');
     
-    // Modais
     const victoryModal = document.getElementById('victory-modal');
     const infoModal = document.getElementById('info-modal');
     const closeInfoBtn = document.getElementById('close-info-btn');
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalTimeSpan = document.getElementById('final-time');
     const playAgainBtn = document.getElementById('play-again-btn');
 
-    // --- Configurações e Estado do Jogo ---
+ 
     const TOTAL_ERRORS = 7;
     const TOTAL_HINTS = 3;
     const HINT_DURATION = 1500;
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let sounds = {};
     let audioReady = false;
 
-    // --- Lógica de Áudio com Tone.js ---
     function setupSounds() {
         sounds.correct = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         sounds.wrong = new Tone.Synth({ oscillator: { type: 'square', frequency: 'C3' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.2 } }).toDestination();
@@ -42,8 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         sounds.click = new Tone.MembraneSynth({ pitchDecay: 0.01, octaves: 2, envelope: { attack: 0.001, decay: 0.2, sustain: 0 } }).toDestination();
         audioReady = true;
     }
-
-    // --- Lógica de Confetes ---
     function celebrate() {
         const duration = 3 * 1000;
         const animationEnd = Date.now() + duration;
@@ -58,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 250);
     }
 
-    // --- FLUXO DE INICIALIZAÇÃO E TELAS ---
     setTimeout(() => {
         loadingScreen.classList.add('hidden');
         nameScreen.classList.remove('hidden');
