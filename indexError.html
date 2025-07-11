@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo dos 7 Erros: Sistema Justo vs. Viés</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tone.js para áudio e Canvas-Confetti para celebração -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div id="loading-screen" class="screen">
+        <div class="spinner"></div>
+        <p>Analisando os algoritmos...</p>
+    </div>
+
+    <div id="name-screen" class="screen hidden">
+        <div class="card">
+            <h1>Desafio da Ética Digital</h1>
+            <p>Digite seu nome para começar a identificar as falhas no sistema.</p>
+            <form id="name-form">
+                <input type="text" id="name-input" placeholder="Seu nome" required>
+                <button type="submit" class="btn btn-primary">Iniciar Auditoria</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="game-container" class="hidden">
+        <header class="game-header">
+            <h1>Jogo dos 7 Erros</h1>
+            <p class="subtitle">Compare o sistema justo (esquerda) com o sistema com viés (direita)</p>
+            <div class="stats-container">
+                <div class="stat-item"><span>Falhas</span><p><span id="errors-found-count">0</span> / 7</p></div>
+                <div class="stat-item"><span>Tempo</span><p id="timer">00:00</p></div>
+                <div class="stat-item"><button id="hint-btn" class="btn btn-secondary">Dica (<span id="hints-left">3</span>)</button></div>
+                <div class="stat-item"><button id="info-btn" class="btn btn-info">Saber Mais</button></div>
+                <div class="stat-item"><button id="exit-btn" class="btn btn-danger">Sair</button></div>
+            </div>
+        </header>
+
+        <main class="game-area">
+            <div class="image-wrapper"><h2 class="image-title">Sistema Justo</h2><div class="scene"><svg viewBox="0 0 400 300" class="scene-svg"><defs><linearGradient id="grad-just" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E0F7FA;stop-opacity:1" /><stop offset="100%" style="stop-color:#B2EBF2;stop-opacity:1" /></linearGradient></defs><rect width="400" height="300" fill="url(#grad-just)"/><g><rect x="175" y="120" width="50" height="80" rx="5" fill="#CFD8DC"/><rect x="170" y="115" width="60" height="10" rx="3" fill="#B0BEC5"/><circle cx="200" cy="110" r="20" fill="#CFD8DC"/><circle cx="200" cy="110" r="15" fill="#4DD0E1"/><path d="M 190 135 q 10 10 20 0" stroke="#37474F" fill="none" stroke-width="1.5" stroke-linecap="round"/></g><g><circle cx="50" cy="60" r="15" fill="#8D6E63"/><circle cx="90" cy="60" r="15" fill="#FBC02D"/><circle cx="130" cy="60" r="15" fill="#3949AB"/></g><g><circle cx="50" cy="220" r="20" fill="#8D6E63"/><path d="M 40 223 q 5 5 10 0" stroke="black" fill="none" stroke-width="1.5"/><circle cx="45" cy="245" r="10" fill="#28A745"/></g><g><circle cx="350" cy="220" r="20" fill="#FBC02D"/><path d="M 340 223 q 5 5 10 0" stroke="black" fill="none" stroke-width="1.5"/><circle cx="355" cy="245" r="10" fill="#28A745"/></g><polyline points="280,80 300,60 320,80 340,60" fill="none" stroke="#28A745" stroke-width="3"/></svg></div></div>
+            <div id="modified-image-wrapper" class="image-wrapper"><h2 class="image-title image-title-biased">Sistema com Viés</h2><div class="scene"><svg id="svg-biased" viewBox="0 0 400 300" class="scene-svg"><defs><linearGradient id="grad-biased" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFEBEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#FFCDD2;stop-opacity:1" /></linearGradient></defs><rect width="400" height="300" fill="url(#grad-biased)"/><g><rect x="175" y="120" width="50" height="80" rx="5" fill="#90A4AE"/><rect x="170" y="115" width="60" height="10" rx="3" fill="#607D8B"/><circle cx="200" cy="110" r="20" fill="#90A4AE"/><circle id="error-visual-1" cx="200" cy="110" r="15" fill="#D32F2F"/><line id="error-visual-2" x1="190" y1="140" x2="210" y2="140" stroke="#37474F" stroke-width="1.5"/></g><g id="error-visual-3"><circle cx="50" cy="60" r="15" fill="#FBC02D"/><circle cx="90" cy="60" r="15" fill="#FBC02D"/><circle cx="130" cy="60" r="15" fill="#FBC02D"/></g><g><circle cx="50" cy="220" r="20" fill="#8D6E63"/><path id="error-visual-4" d="M 40 228 q 5 -5 10 0" stroke="black" fill="none" stroke-width="1.5"/><circle id="error-visual-5" cx="45" cy="245" r="10" fill="#D32F2F"/></g><g><circle cx="350" cy="220" r="20" fill="#FBC02D"/><path d="M 340 223 q 5 5 10 0" stroke="black" fill="none" stroke-width="1.5"/><circle cx="355" cy="245" r="10" fill="#28A745"/></g><polyline id="error-visual-6" points="280,80 300,100 320,60 340,40" fill="none" stroke="#D32F2F" stroke-width="3"/><rect id="error-visual-7" x="180" y="150" width="40" height="20" fill="black" opacity="0.8" rx="3"/><circle class="error-hitbox" data-error-id="1" cx="200" cy="110" r="15" /><rect class="error-hitbox" data-error-id="2" x="188" y="138" width="24" height="4" /><rect class="error-hitbox" data-error-id="3" x="40" y="45" width="100" height="30" /><rect class="error-hitbox" data-error-id="4" x="38" y="226" width="14" height="4" /><circle class="error-hitbox" data-error-id="5" cx="45" cy="245" r="10" /><rect class="error-hitbox" data-error-id="6" x="278" y="38" width="64" height="64" /><rect class="error-hitbox" data-error-id="7" x="180" y="150" width="40" height="20" /></svg></div></div>
+        </main>
+    </div>
+
+    <div id="victory-modal" class="screen hidden"><div class="card"><h2>Parabéns, <span id="player-name-victory"></span>!</h2><p>Você identificou todas as falhas e promoveu um sistema mais justo!</p><div class="final-stat"><span>Seu tempo de auditoria:</span><strong id="final-time"></strong></div><button id="play-again-btn" class="btn btn-primary">Analisar Novamente</button></div></div>
+    
+    <div id="info-modal" class="screen hidden">
+        <div class="card info-card">
+            <button id="close-info-btn" class="close-btn">&times;</button>
+            <h2>O Que é Racismo Algorítmico?</h2>
+            <p class="info-text">
+                O <strong>racismo algorítmico</strong> ocorre quando sistemas de computador, de forma intencional ou não, reproduzem preconceitos da sociedade, tratando pessoas de forma desigual com base em sua raça.
+            </p>
+            <p class="info-text">
+                Isso acontece porque os algoritmos aprendem com dados do mundo real. Se esses dados (como textos, imagens e estatísticas) contêm vieses históricos, o sistema aprende e perpetua essas injustiças.
+            </p>
+            <h3>Como Evitar?</h3>
+            <ul class="info-list">
+                <li><strong>Equipes Diversas:</strong> Pessoas com diferentes vivências criam tecnologias mais justas.</li>
+                <li><strong>Auditoria de Dados:</strong> Analisar e corrigir os dados antes de usá-los para treinar algoritmos.</li>
+                <li><strong>Transparência:</strong> Deixar claro como os sistemas tomam suas decisões.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

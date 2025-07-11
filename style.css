@@ -1,0 +1,162 @@
+:root {
+    --primary-color: #3D5AFE;
+    --secondary-color: #FFAB00;
+    --info-color: #00B0FF;
+    --danger-color: #F50057;
+    --background-color: #F4F6F8;
+    --text-color: #263238;
+    --card-bg-color: #FFFFFF;
+    --success-color: #00C853;
+    --font-family: 'Poppins', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s;
+    z-index: 100;
+}
+.screen.hidden { opacity: 0; visibility: hidden; }
+
+#loading-screen { background-color: #263238; color: white; }
+#name-screen, #victory-modal, #info-modal { background-color: rgba(38, 50, 56, 0.6); backdrop-filter: blur(8px); }
+
+.card {
+    background-color: var(--card-bg-color);
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    border-radius: 1.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    animation: slide-up 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+}
+.info-card { max-width: 600px; text-align: left; }
+
+@keyframes slide-up {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.card h1, .card h2 { margin-bottom: 0.75rem; color: var(--text-color); }
+.card h2 { text-align: center; }
+.card p { margin-bottom: 1.5rem; color: #546E7A; line-height: 1.6; }
+.card input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    border: 2px solid #CFD8DC;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.card input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(61, 90, 254, 0.2); }
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+#name-form .btn { width: 100%; }
+.btn-primary { background-color: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(61, 90, 254, 0.2); }
+.btn-primary:hover { background-color: #304FFE; transform: translateY(-3px); box-shadow: 0 7px 20px rgba(61, 90, 254, 0.3); }
+.btn-secondary { background-color: var(--secondary-color); color: #263238; }
+.btn-secondary:hover { background-color: #FFC400; }
+.btn-info { background-color: var(--info-color); color: white; }
+.btn-info:hover { background-color: #0091EA; }
+.btn-danger { background-color: var(--danger-color); color: white; }
+.btn-danger:hover { background-color: #C51162; }
+.btn:disabled { background-color: #B0BEC5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+#game-container { width: 100%; max-width: 1400px; padding: 1rem; }
+.game-header { text-align: center; margin-bottom: 1.5rem; }
+.game-header .subtitle { color: #546E7A; margin-top: 0.25rem; }
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    background-color: var(--card-bg-color);
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    margin-top: 1rem;
+}
+.stat-item { text-align: center; }
+.stat-item span { font-size: 0.9rem; color: #78909C; }
+.stat-item p { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
+
+.game-area { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+@media (min-width: 1024px) { .game-area { grid-template-columns: 1fr 1fr; } }
+
+.image-wrapper {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background-color: var(--card-bg-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    aspect-ratio: 4 / 3;
+    padding: 2.5rem 0.5rem 0.5rem;
+    transition: transform 0.3s ease;
+}
+.image-wrapper:hover { transform: scale(1.01); }
+
+.image-title { position: absolute; top: 0.75rem; left: 50%; transform: translateX(-50%); font-weight: 600; color: #fff; background-color: var(--success-color); padding: 0.25rem 1rem; border-radius: 99px; font-size: 0.9rem; }
+.image-title-biased { background-color: var(--danger-color); }
+
+.scene-svg { display: block; width: 100%; height: 100%; }
+.error-hitbox { fill: transparent; cursor: crosshair; }
+.error-hitbox.found { pointer-events: none; cursor: default; }
+
+.error-circle { position: absolute; border: 4px solid var(--danger-color); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%) scale(0.5); transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; background-color: rgba(213, 0, 0, 0.1); backdrop-filter: blur(1px); }
+.error-circle.found { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+.final-stat { background-color: var(--background-color); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1.5rem; }
+.final-stat span { color: #546E7A; }
+.final-stat strong { display: block; font-size: 1.75rem; color: var(--success-color); }
+
+.spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.2); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-bottom: 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.wrong-click-feedback { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-3px, 0, 0); } 40%, 60% { transform: translate3d(3px, 0, 0); } }
+
+.close-btn { position: absolute; top: 0.5rem; right: 1rem; font-size: 2rem; color: #90A4AE; background: none; border: none; cursor: pointer; transition: color 0.3s; }
+.close-btn:hover { color: var(--text-color); }
+.info-text { margin-bottom: 1rem !important; }
+.info-list { list-style-position: inside; padding-left: 0.5rem; margin-top: 1rem; }
+.info-list li { margin-bottom: 0.5rem; }
